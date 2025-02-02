@@ -1,0 +1,6 @@
+@investbuddy.Server_HostAddress = http://localhost:5252
+
+GET {{investbuddy.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
