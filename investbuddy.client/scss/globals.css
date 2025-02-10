@@ -1,0 +1,13 @@
+/* Style global de l'application */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+  }
+  
+  h1, h2, h3 {
+    color: #2c3e50;
+  }
+  

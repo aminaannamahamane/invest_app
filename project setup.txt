@@ -1,0 +1,5 @@
+.net sdk (download )
+dotnet restore
+dotnet build
+dotnet run --project investbuddy.Server/investbuddy.Server.csproj (execution)
+  
