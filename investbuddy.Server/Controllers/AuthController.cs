@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using FirebaseAdmin.Auth;
 using Google.Cloud.Firestore;
 using investbuddy.Server.Models;
+using Google.Api;
+
 
 namespace investbuddy.Server.Controllers
 {
@@ -11,11 +13,41 @@ namespace investbuddy.Server.Controllers
     public class AuthController : ControllerBase
     {
         private readonly FirestoreDb _firestoreDb;
+        private readonly FirebaseAuth _authProvider;
 
         public AuthController(FirestoreDb firestoreDb)
         {
             _firestoreDb = firestoreDb;
         }
+
+
+        //connexion with email and password
+        [HttpPost("signin-light")]
+        public async Task<IActionResult> VerifyToken ( [FromBody] String token)
+        {
+            try 
+            {
+                var decodedToken = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(token);
+                return Ok(new { UserId = decodedToken.Uid});
+            } catch {
+                return Unauthorized(new { message = "Échec de l'authentification Firebase"});
+            }
+
+        }
+
+        //retreive user data from firebase
+        [HttpGet("user/{uid}")]
+        public async Task<IActionResult> GetUser ( String uid)
+        {
+            try 
+            {
+                var userRecord = await FirebaseAuth.DefaultInstance.GetUserAsync(uid);
+                return Ok(userRecord);
+            } catch {
+                return NotFound("utilisateur non trouvé");
+            }
+        }
+
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)

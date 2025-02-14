@@ -63,7 +63,42 @@ const SigninLightPage = () => {
                 
               </div>
               <div className='col-md-6 px-2 pt-2 pb-4 px-sm-5 pb-sm-5 pt-md-5'>
-                {/* Bouton de connexion Google uniquement */}
+                {/* forme d'Autehntification*/}
+                <form action = "/signin-light" className='mb-3'>    
+                  <div className='mb-3'>
+                    <label htmlFor='email' className='form-label'>
+                      Email address
+                    </label>
+                    <input
+                      name = 'email'
+                      type='email'
+                      className='form-control'
+                      id='email'
+                      />
+                  </div>
+                  <div className='mb-3'>
+                    <label htmlFor='password' className='form-label'>
+                      Password
+                    </label>
+                    <input
+                      name = 'password'
+                      type='password'
+                      className='form-control'
+                      id='password'
+                    />
+                  </div>
+                  
+
+                  <Button 
+                    type='submit' 
+                    
+                    variant='outline-info w-100 mb-3'>
+                    Sign in
+                  </Button>
+                </form>
+
+                      {/* Bouton de connexion Google uniquement */}
+
                 <GoogleLoginButton />
               </div>
             </div>
