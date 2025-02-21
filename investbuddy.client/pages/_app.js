@@ -2,7 +2,7 @@ import SSRProvider from 'react-bootstrap/SSRProvider';
 import Router from 'next/router';
 import Head from 'next/head';
 import NProgress from 'nprogress';
-import ScrollTopButton from '../components/ScrollTopButton';
+import ScrollTopButton from '../src/components/ScrollTopButton';
 import { AuthProvider } from '../context/AuthContext'; // Import AuthProvider
 import '../scss/theme.scss';
 
