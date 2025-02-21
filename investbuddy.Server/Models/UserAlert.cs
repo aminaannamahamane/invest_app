@@ -6,7 +6,7 @@ namespace investbuddy.Server.Models
     public class UserAlert
     {
         [FirestoreProperty]
-        public string  Id { get; set; } = null!;
+        public string Id { get; set; } = null!;
 
         [FirestoreProperty]
         public string UserId { get; set; } = null!;
