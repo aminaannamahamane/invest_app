@@ -2,46 +2,60 @@ using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Firestore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using investbuddy.Server.Services; // ✅ Ajoute ceci
+using investbuddy.Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 📌 Définir la variable d’environnement pour Firebase
+// Définir la variable d’environnement pour Firebase
 Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS",
-    @"C:\Users\adjma\OneDrive\Documents\Adjmal\uOttawa\Winter 2025\final project\investbuddy\InvestBuddy\investbuddy.Server\firebase-config.json");
+    @"C:\Users\adjma\OneDrive\Documents\Adjmal\uOttawa\Winter 2025\final project\investbuddy\investbuddy.Server\firebase-config.json");
 
-// 🚀 Initialisation de Firebase
+// Initialisation de Firebase
 FirebaseApp.Create(new AppOptions()
 {
     Credential = GoogleCredential.GetApplicationDefault()
 });
 
-// 🔧 Ajouter Firestore comme service singleton
+// Ajouter Firestore comme service singleton
 builder.Services.AddSingleton(FirestoreDb.Create("investbuddy-dc991"));
 
-// 📌 Ajouter FirebaseService (🔥 C'est la correction)
+// Ajouter FirebaseService
 builder.Services.AddSingleton<FirebaseService>();
 
-// ✅ Ajouter les services Auth et Authorization
+// Ajouter une politique CORS pour autoriser les requêtes de votre frontend Next.js (par exemple http://localhost:3000)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowNextJs",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:3000")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
+// Ajouter les services d'authentification et d'autorisation
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.Authority = "https://securetoken.google.com/investbuddy-dc991";
         options.Audience = "investbuddy-dc991";
     });
-
 builder.Services.AddAuthorization();
 
-// ✅ 🚀 Ajouter les services pour les contrôleurs
+// Ajouter les contrôleurs
 builder.Services.AddControllers();
 
 var app = builder.Build();
 
 app.UseRouting();
-app.UseAuthentication();  // 🚀 Active l'authentification Firebase
+
+// Activer CORS avec la politique définie
+app.UseCors("AllowNextJs");
+
+app.UseAuthentication();
 app.UseAuthorization();
 
-// ✅ 🚀 S'assurer que les contrôleurs sont bien mappés
 app.MapControllers();
 
 app.Run();

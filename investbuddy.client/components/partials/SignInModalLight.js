@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'; // Ensure React is imported
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Button from 'react-bootstrap/Button';
-import { useAuth } from "../../../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 
 import GoogleLoginButton from '../Auth/GoogleLoginButton'; // Ensure this path is correct
 

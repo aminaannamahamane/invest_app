@@ -1,5 +1,4 @@
 using Google.Cloud.Firestore;
-using System.Collections.Generic;
 
 namespace investbuddy.Server.Models
 {
@@ -8,10 +7,8 @@ namespace investbuddy.Server.Models
     {
         [FirestoreProperty]
         public string UserId { get; set; }
-
+        
         [FirestoreProperty]
-        public List<string> DefaultStocks { get; set; }
+        public string StockName { get; set; }
     }
-
-    
 }

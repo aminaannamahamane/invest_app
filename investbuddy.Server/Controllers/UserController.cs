@@ -43,12 +43,12 @@ namespace investbuddy.Server.Controllers
         [HttpPost("stocks")]
         public async Task<IActionResult> AddStockToWatchlist([FromBody] UserStock userStock)
         {
-            if (userStock == null || string.IsNullOrEmpty(userStock.UserId) || userStock.DefaultStocks == null)
+            if (userStock == null || string.IsNullOrEmpty(userStock.UserId) || userStock.StockName  == null)
             {
                 return BadRequest(new { message = "userId et defaultStocks sont requis." });
             }
 
-            await _firebaseService.AddUserStocksAsync(userStock.UserId, userStock.DefaultStocks);
+            await _firebaseService.AddUserStocksAsync(userStock.UserId, userStock.StockName );
 
             return Ok(new { message = "Stock watchlist updated successfully!" });
         }
