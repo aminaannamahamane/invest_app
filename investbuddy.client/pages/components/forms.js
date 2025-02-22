@@ -14,7 +14,7 @@ import Alert from 'react-bootstrap/Alert'
 import Code from '../../components/Code'
 import PasswordToggle from '../../components/PasswordToggle'
 import ReactSlider from 'react-slider'
-import NumberFormat from 'react-number-format'
+import { NumericFormat } from 'react-number-format'
 
 const FormsPage = () => {
 
@@ -1434,7 +1434,7 @@ render(<FormExample />)`}</Code>
           <Form.Group controlId='card-number' className='mb-3' style={{maxWidth: '25rem'}}>
             <Form.Label>Card number</Form.Label>
             <Form.Control
-              as={NumberFormat}
+              as={NumericFormat}
               format='#### #### #### ####'
               placeholder='0000 0000 0000 0000'
             />
@@ -1442,7 +1442,7 @@ render(<FormExample />)`}</Code>
           <Form.Group controlId='card-cvc' className='mb-3' style={{maxWidth: '25rem'}}>
             <Form.Label>Card CVC</Form.Label>
             <Form.Control
-              as={NumberFormat}
+              as={NumericFormat}
               format='###'
               placeholder='000'
             />
@@ -1450,7 +1450,7 @@ render(<FormExample />)`}</Code>
           <Form.Group controlId='date' className='mb-3' style={{maxWidth: '25rem'}}>
             <Form.Label>Date</Form.Label>
             <Form.Control
-              as={NumberFormat}
+              as={NumericFormat}
               format='##/##'
               placeholder='mm/yy'
             />
@@ -1458,7 +1458,7 @@ render(<FormExample />)`}</Code>
           <Form.Group controlId='date-long' className='mb-3' style={{maxWidth: '25rem'}}>
             <Form.Label>Date long</Form.Label>
             <Form.Control
-              as={NumberFormat}
+              as={NumericFormat}
               format='####-##-##'
               placeholder='yyyy-mm-dd'
             />
@@ -1466,7 +1466,7 @@ render(<FormExample />)`}</Code>
           <Form.Group controlId='time' className='mb-3' style={{maxWidth: '25rem'}}>
             <Form.Label>Time</Form.Label>
             <Form.Control
-              as={NumberFormat}
+              as={NumericFormat}
               format='##:##:##'
               placeholder='hh:mm:ss'
             />
@@ -1474,7 +1474,7 @@ render(<FormExample />)`}</Code>
           <Form.Group controlId='phone' className='mb-3' style={{maxWidth: '25rem'}}>
             <Form.Label>Phone</Form.Label>
             <Form.Control
-              as={NumberFormat}
+              as={NumericFormat}
               format='+1(##) ###-####'
               placeholder='+1(00) 000-0000'
             />
@@ -1482,13 +1482,13 @@ render(<FormExample />)`}</Code>
         </Tab.Pane>
         <Tab.Pane eventKey='code'>
           <Code language='jsx'>{`import Form from 'react-bootstrap/Form'
-import NumberFormat from 'react-number-format'
+import { NumericFormat } from 'react-number-format'
 
 {/* Card number format example */}
 <Form.Group controlId='card-number' className='mb-3'>
   <Form.Label>Card number</Form.Label>
   <Form.Control
-    as={NumberFormat}
+    as={NumericFormat}
     format='#### #### #### ####'
     placeholder='0000 0000 0000 0000'
   />
@@ -1498,7 +1498,7 @@ import NumberFormat from 'react-number-format'
 <Form.Group controlId='card-cvc' className='mb-3'>
   <Form.Label>Card CVC</Form.Label>
   <Form.Control
-    as={NumberFormat}
+    as={NumericFormat}
     format='###'
     placeholder='000'
   />
@@ -1508,7 +1508,7 @@ import NumberFormat from 'react-number-format'
 <Form.Group controlId='date' className='mb-3'>
   <Form.Label>Date</Form.Label>
   <Form.Control
-    as={NumberFormat}
+    as={NumericFormat}
     format='##/##'
     placeholder='mm/yy'
   />
@@ -1518,7 +1518,7 @@ import NumberFormat from 'react-number-format'
 <Form.Group controlId='date-long' className='mb-3'>
   <Form.Label>Date</Form.Label>
   <Form.Control
-    as={NumberFormat}
+    as={NumericFormat}
     format='####-##-##'
     placeholder='yyyy-mm-dd'
   />
@@ -1528,7 +1528,7 @@ import NumberFormat from 'react-number-format'
 <Form.Group controlId='time' className='mb-3'>
   <Form.Label>Time</Form.Label>
   <Form.Control
-    as={NumberFormat}
+    as={NumericFormat}
     format='##:##:##'
     placeholder='hh:mm:ss'
   />
@@ -1538,7 +1538,7 @@ import NumberFormat from 'react-number-format'
 <Form.Group controlId='phone' className='mb-3'>
   <Form.Label>Phone</Form.Label>
   <Form.Control
-    as={NumberFormat}
+    as={NumericFormat}
     format='+1(##) ###-####'
     placeholder='+1(00) 000-0000'
   />

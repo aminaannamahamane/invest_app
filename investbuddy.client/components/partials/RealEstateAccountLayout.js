@@ -51,9 +51,9 @@ const RealEstateAccountLayout = ({ accountPageTitle, children }) => {
                 </ul>
               </div>
             </div>
-            <Button as={Link} href='/real-estate/add-property' size='lg' className='w-100 mb-3'>
+            <Button as={Link} href='/real-estate/add-stock' size='lg' className='w-100 mb-3'>
               <i className='fi-plus me-2'></i>
-              Add property
+              Add stock
             </Button>
             <Button
               variant='outline-secondary'
@@ -83,33 +83,18 @@ const RealEstateAccountLayout = ({ accountPageTitle, children }) => {
                   Password &amp; Security
                 </CardNav.Item>
                 <CardNav.Item
-                  href='/real-estate/account-properties'
+                  href='/real-estate/account-stocks'
                   icon='fi-home'
-                  active={accountPageTitle === 'My Properties' ? true : false}
+                  active={accountPageTitle === 'My Stocks' ? true : false}
                 >
-                  My Properties
+                  My Stocks
                 </CardNav.Item>
                 <CardNav.Item
-                  href='/real-estate/account-wishlist'
-                  icon='fi-heart'
-                  active={accountPageTitle === 'Wishlist' ? true : false}
-                >
-                  Wishlist
-                  <span className='badge bg-faded-light ms-2'>4</span>
-                </CardNav.Item>
-                <CardNav.Item
-                  href='/real-estate/account-reviews'
-                  icon='fi-star'
-                  active={accountPageTitle === 'Reviews' ? true : false}
-                >
-                  Reviews
-                </CardNav.Item>
-                <CardNav.Item
-                  href='/real-estate/account-notifications'
+                  href='/real-estate/account-alerts'
                   icon='fi-bell'
-                  active={accountPageTitle === 'Notifications' ? true : false}
+                  active={accountPageTitle === 'Alerts' ? true : false}
                 >
-                  Notifications
+                  Alerts
                 </CardNav.Item>
                 <CardNav.Item href='/real-estate/help-center' icon='fi-help'>
                   Help

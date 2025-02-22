@@ -1,8 +1,7 @@
-import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
+import { initializeApp } from "firebase/app";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
-// 🔹 Configuration Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyCndbfhMU4TkS7nGVARnN2tJpJx9QholQ4",
   authDomain: "investbuddy-dc991.firebaseapp.com",
@@ -13,10 +12,10 @@ const firebaseConfig = {
   measurementId: "G-GMSVNX8F8Y"
 };
 
-// 🔹 Initialisation Firebase
+// Initialiser Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
-const db = getFirestore(app);
+const googleProvider = new GoogleAuthProvider();
+const db = getFirestore(app);  // 🔥 Ajout de Firestore
 
-export { auth, provider, db, signInWithPopup, doc, getDoc, setDoc };
+export { auth, googleProvider, db };  

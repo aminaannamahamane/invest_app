@@ -11,21 +11,22 @@ namespace investbuddy.Server.Services
         private readonly FirestoreDb _db;
         private const string UsersCollection = "users";
         private const string AlertsCollection = "userAlerts";
+        private const string UserStocksCollection = "userStocks";
 
-        // 📌 Injection de dépendance Firestore
+        // Inject Firestore dependency
         public FirebaseService(FirestoreDb firestoreDb)
         {
             _db = firestoreDb;
         }
 
-        // 🚀 Ajouter un utilisateur
+        // 🚀 Add a new user
         public async Task AddUserAsync(UserModel user)
         {
             DocumentReference docRef = _db.Collection(UsersCollection).Document(user.Id);
             await docRef.SetAsync(user);
         }
 
-        // 🚀 Récupérer un utilisateur
+        // 🚀 Retrieve a user
         public async Task<UserModel> GetUserAsync(string userId)
         {
             DocumentReference docRef = _db.Collection(UsersCollection).Document(userId);
@@ -36,7 +37,7 @@ namespace investbuddy.Server.Services
 
             var user = snapshot.ConvertTo<UserModel>();
 
-            // 🔥 Correction des timestamps
+            // Adjust timestamps if necessary
             user.CreatedAt = snapshot.ContainsField("CreatedAt")
                 ? snapshot.GetValue<Timestamp>("CreatedAt").ToDateTime()
                 : DateTime.UtcNow;
@@ -48,68 +49,71 @@ namespace investbuddy.Server.Services
             return user;
         }
 
-        // 🚀 Mettre à jour la date de dernière connexion
+        // 🚀 Update user's last login timestamp
         public async Task UpdateLastLoginAsync(string userId)
         {
             DocumentReference docRef = _db.Collection(UsersCollection).Document(userId);
             await docRef.UpdateAsync("LastLogin", Timestamp.FromDateTime(DateTime.UtcNow));
         }
 
-        // 🚀 Mettre à jour le thème de l'utilisateur
+        // 🚀 Update user theme
         public async Task UpdateUserThemeAsync(string userId, string theme)
         {
             DocumentReference docRef = _db.Collection(UsersCollection).Document(userId);
             await docRef.UpdateAsync("Theme", theme);
         }
 
-        // 🚀 Ajouter une watchlist d’actions
-        public async Task AddUserStocksAsync(string userId, List<string> stocks)
+        // 🚀 Add a tuple (userId, stock) to the "userStocks" collection.
+        // Each document will have two string fields: "UserId" and "StockName".
+        public async Task AddUserStocksAsync(string userId, string stockName)
         {
-            DocumentReference docRef = _db.Collection("userStocks").Document(userId);
-            
-            Dictionary<string, object> updateData = new Dictionary<string, object>
+            // Create a new document with an auto-generated ID
+            DocumentReference docRef = _db.Collection(UserStocksCollection).Document();
+
+            // Prepare the data with the two fields
+            Dictionary<string, object> data = new Dictionary<string, object>
             {
-                { "DefaultStocks", stocks }
+                { "UserId", userId },
+                { "StockName", stockName }
             };
 
-            await docRef.SetAsync(updateData, SetOptions.MergeAll);
+            await docRef.SetAsync(data);
         }
 
-        // 🚀 Ajouter une alerte utilisateur
-        public async Task AddUserAlertAsync(UserAlert alert)
+        // 🚀 Retrieve all stocks (UserStock) for a given user
+        public async Task<List<UserStock>> GetUserStocksAsync(string userId)
         {
-            DocumentReference docRef = _db.Collection("userAlerts").Document(alert.Id);
-            DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+            CollectionReference stocksCollection = _db.Collection(UserStocksCollection);
+            Query query = stocksCollection.WhereEqualTo("UserId", userId);
+            QuerySnapshot querySnapshot = await query.GetSnapshotAsync();
 
-            if (!snapshot.Exists)
+            List<UserStock> stocks = new List<UserStock>();
+            foreach (DocumentSnapshot doc in querySnapshot.Documents)
             {
-                alert.CreatedAt = Timestamp.FromDateTime(DateTime.UtcNow);
+                if (doc.Exists)
+                {
+                    var stock = doc.ConvertTo<UserStock>();
+                    stocks.Add(stock);
+                    Console.WriteLine($"Récupéré: doc.Id={doc.Id}, UserId={stock.UserId}, StockName={stock.StockName}");
+                }
             }
-            else
-            {
-                Timestamp createdAt = snapshot.ContainsField("CreatedAt")
-                    ? snapshot.GetValue<Timestamp>("CreatedAt")
-                    : Timestamp.FromDateTime(DateTime.UtcNow);
-
-                alert.CreatedAt = createdAt;
-            }
-
-            Dictionary<string, object> alertData = new Dictionary<string, object>
-            {
-                { "Id", alert.Id },
-                { "UserId", alert.UserId },
-                { "AlertType", alert.AlertType },
-                { "Condition", alert.Condition },
-                { "Threshold", alert.Threshold },
-                { "CreatedAt", alert.CreatedAt },
-                { "TriggeredAt", alert.TriggeredAt.HasValue ? alert.TriggeredAt.Value : null },
-                { "Status", alert.Status }
-            };
-
-            await docRef.SetAsync(alertData, SetOptions.MergeAll);
+            return stocks;
         }
 
-        // 🚀 Récupérer toutes les alertes d'un utilisateur
+
+        
+        public async Task<string> AddUserAlertAsync(UserAlert alert)
+        {
+            CollectionReference alertsCollection = _db.Collection("userAlerts");
+            DocumentReference docRef = alertsCollection.Document(); // Firestore génère l'ID
+
+            alert.Id = docRef.Id; // Assigner l'ID généré
+            await docRef.SetAsync(alert);
+
+            return docRef.Id;
+        }
+
+        // 🚀 Retrieve all alerts for a given user
         public async Task<List<UserAlert>> GetUserAlertsAsync(string userId)
         {
             Query query = _db.Collection(AlertsCollection).WhereEqualTo("UserId", userId);
@@ -123,10 +127,9 @@ namespace investbuddy.Server.Services
                 {
                     var alert = snapshot.ConvertTo<UserAlert>();
                     alert.CreatedAt = snapshot.GetValue<Timestamp>("CreatedAt");
-                    alert.TriggeredAt = snapshot.ContainsField("TriggeredAt") 
-                        ? snapshot.GetValue<Timestamp>("TriggeredAt") 
+                    alert.TriggeredAt = snapshot.ContainsField("TriggeredAt")
+                        ? snapshot.GetValue<Timestamp>("TriggeredAt")
                         : (Timestamp?)null;
-
                     alerts.Add(alert);
                 }
             }
@@ -134,14 +137,14 @@ namespace investbuddy.Server.Services
             return alerts;
         }
 
-        // 🚀 Supprimer une alerte utilisateur
+        // 🚀 Delete a user alert
         public async Task DeleteUserAlertAsync(string alertId)
         {
             DocumentReference docRef = _db.Collection(AlertsCollection).Document(alertId);
             await docRef.DeleteAsync();
         }
 
-        // 🚀 Mettre à jour l’état d’une alerte (ex: active, triggered, disabled)
+        // 🚀 Update the status of a user alert (e.g., active, triggered, disabled)
         public async Task UpdateUserAlertStatusAsync(string alertId, string status)
         {
             DocumentReference docRef = _db.Collection(AlertsCollection).Document(alertId);
