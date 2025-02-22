@@ -10,8 +10,7 @@ using investbuddy.Server.Models; // ✅ Ajoute cec
 var builder = WebApplication.CreateBuilder(args);
 
 // 📌 Définir la variable d’environnement pour Firebase
-Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS",
-    @"C:\Users\adjma\OneDrive\Documents\Adjmal\uOttawa\Winter 2025\final project\investbuddy\InvestBuddy\investbuddy.Server\firebase-config.json");
+Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "firebase-config.json");
 
 // 🚀 Initialisation de Firebase
 FirebaseApp.Create(new AppOptions()
