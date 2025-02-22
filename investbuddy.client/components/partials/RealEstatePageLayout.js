@@ -13,9 +13,9 @@ import StickyNavbar from '../StickyNavbar'
 import StarRating from '../StarRating'
 import SocialButton from '../SocialButton'
 import MarketButton from '../MarketButton'
-import SignInModalLight from '../partials/SignInModalLight'
-import SignUpModalLight from '../partials/SignUpModalLight'
-
+import SignInModalLight from './SignInModalLight'
+import SignUpModalLight from './SignUpModalLight'
+import CardNav from '../CardNav'
 const RealEstatePageLayout = (props) => {
 
   // Sign in modal
@@ -127,9 +127,9 @@ const RealEstatePageLayout = (props) => {
                   <i className='fi-heart opacity-60 me-2'></i>
                   Password &amp; Security
                 </Dropdown.Item>
-                <Dropdown.Item as={Link} href='/real-estate/account-properties'>
+                <Dropdown.Item as={Link} href='/real-estate/account-stocks'>
                   <i className='fi-home opacity-60 me-2'></i>
-                  My Properties
+                  My Stocks 
                 </Dropdown.Item>
                 <Dropdown.Item as={Link} href='/real-estate/account-wishlist'>
                   <i className='fi-heart opacity-60 me-2'></i>
@@ -139,9 +139,9 @@ const RealEstatePageLayout = (props) => {
                   <i className='fi-star opacity-60 me-2'></i>
                   Reviews
                 </Dropdown.Item>
-                <Dropdown.Item as={Link} href='/real-estate/account-notifications'>
+                <Dropdown.Item as={Link} href='/real-estate/account-alertes'>
                   <i className='fi-bell opacity-60 me-2'></i>
-                  Notifications
+                  Alerts
                 </Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.Item as={Link} href='/real-estate/help-center'>Help</Dropdown.Item>
@@ -155,9 +155,9 @@ const RealEstatePageLayout = (props) => {
               </Button>
             }
 
-            <Button as={Link} href='/real-estate/add-property' size='sm' className='order-lg-3 ms-2'>
-              <i className='fi-plus me-2'></i>
-              Add <span className='d-none d-sm-inline'>property</span>
+            <Button as={Link} href='/real-estate/add-stock' size='sm' className='order-lg-3 ms-2 d-flex align-items-center'>
+              <i className='fi-logout me-2'></i>
+              <span>Sign Out</span>
             </Button>
             
             <Navbar.Collapse id='navbarNav' className='order-md-2'>
@@ -224,10 +224,10 @@ const RealEstatePageLayout = (props) => {
                   <Dropdown.Menu renderOnMount>
                     <Dropdown.Item as={Link} href='/real-estate/account-info'>Personal Info</Dropdown.Item>
                     <Dropdown.Item as={Link} href='/real-estate/account-security'>Password &amp; Security</Dropdown.Item>
-                    <Dropdown.Item as={Link} href='/real-estate/account-properties'>My Properties</Dropdown.Item>
+                    <Dropdown.Item as={Link} href='/real-estate/account-stocks'>My Stocks</Dropdown.Item>
                     <Dropdown.Item as={Link} href='/real-estate/account-wishlist'>Wishlist</Dropdown.Item>
                     <Dropdown.Item as={Link} href='/real-estate/account-reviews'>Reviews</Dropdown.Item>
-                    <Dropdown.Item as={Link} href='/real-estate/account-notifications'>Notifications</Dropdown.Item>
+                    <Dropdown.Item as={Link} href='/real-estate/account-alerts'>Alerts</Dropdown.Item>
                     <Dropdown.Item as={Link} href='/signin-light'>Sign In</Dropdown.Item>
                     <Dropdown.Item as={Link} href='/signup-light'>Sign Up</Dropdown.Item>
                   </Dropdown.Menu>
@@ -237,7 +237,7 @@ const RealEstatePageLayout = (props) => {
                   <Dropdown.Menu renderOnMount>
                     <Dropdown.Item as={Link} href='/real-estate/add-property'>Add Property</Dropdown.Item>
                     <Dropdown.Item as={Link} href='/real-estate/property-promotion'>Property Promotion</Dropdown.Item>
-                    <Dropdown.Item as={Link} href='/real-estate/vendor-properties'>Vendor Page: Properties</Dropdown.Item>
+                    <Dropdown.Item as={Link} href='/real-estate/vendor-stocks'>Vendor Page: Stocks</Dropdown.Item>
                     <Dropdown.Item as={Link} href='/real-estate/vendor-reviews'>Vendor Page: Reviews</Dropdown.Item>
                   </Dropdown.Menu>
                 </Nav.Item>
@@ -279,9 +279,9 @@ const RealEstatePageLayout = (props) => {
                       <i className='fi-heart opacity-60 me-2'></i>
                       Password &amp; Security
                     </Dropdown.Item>
-                    <Dropdown.Item as={Link} href='/real-estate/account-properties'>
+                    <Dropdown.Item as={Link} href='/real-estate/account-stocks'>
                       <i className='fi-home opacity-60 me-2'></i>
-                      My Properties
+                      My Stocks
                     </Dropdown.Item>
                     <Dropdown.Item as={Link} href='/real-estate/account-wishlist'>
                       <i className='fi-heart opacity-60 me-2'></i>
@@ -291,9 +291,9 @@ const RealEstatePageLayout = (props) => {
                       <i className='fi-star opacity-60 me-2'></i>
                       Reviews
                     </Dropdown.Item>
-                    <Dropdown.Item as={Link} href='/real-estate/account-notifications'>
+                    <Dropdown.Item as={Link} href='/real-estate/account-alerts'>
                       <i className='fi-bell opacity-60 me-2'></i>
-                      Notifications
+                      Alerts
                     </Dropdown.Item>
                     <Dropdown.Divider />
                     <Dropdown.Item as={Link} href='/real-estate/help-center'>Help</Dropdown.Item>

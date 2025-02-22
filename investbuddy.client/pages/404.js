@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Container from 'react-bootstrap/Container'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
-import lottie from 'lottie-web/build/player/lottie_light'
+import lottie from 'lottie-web'
 
 const NotFoundPage = () => {
   

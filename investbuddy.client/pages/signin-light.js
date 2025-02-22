@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Button from 'react-bootstrap/Button';
 import { useAuth } from '../context/AuthContext'; // Ensure this path is correct
-import GoogleLoginButton from '../src/components/Auth/GoogleLoginButton'; // Ensure this path is correct
+import GoogleLoginButton from '../components/Auth/GoogleLoginButton'; // Ensure this path is correct
 
 const SigninLightPage = () => {
   const { user } = useAuth(); // Get user authentication state

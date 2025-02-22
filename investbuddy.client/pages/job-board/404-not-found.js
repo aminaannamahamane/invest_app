@@ -8,7 +8,7 @@ import FormGroup from '../../components/FormGroup'
 import FormControl from 'react-bootstrap/FormControl'
 import InputGroup from 'react-bootstrap/InputGroup'
 import Button from 'react-bootstrap/Button'
-import lottie from 'lottie-web/build/player/lottie_light'
+import lottie from 'lottie-web'
 
 const NotFoundPage = () => {
 

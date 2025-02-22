@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import RealEstatePageLayout from '@/components/partials/RealEstatePageLayout'
-import RealEstateAccountLayout from "@/components/partials/RealEstateAccountLayout";
+import RealEstatePageLayout from '../../components/partials/RealEstatePageLayout'
+import RealEstateAccountLayout from "../../components/partials/RealEstateAccountLayout";
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import ProgressBar from 'react-bootstrap/ProgressBar'
