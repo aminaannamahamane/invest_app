@@ -15,7 +15,6 @@ namespace investbuddy.Server.Controllers
        
         public UserStockController()
         {
-            // Remplacez "investbuddy-dc991" par l'ID de votre projet Firebase si nécessaire.
             _firestoreDb = FirestoreDb.Create("investbuddy-dc991");
         }
        
@@ -23,10 +22,18 @@ namespace investbuddy.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUserStock([FromBody] UserStock userStock)
         {
-            if (userStock == null || string.IsNullOrEmpty(userStock.UserId) || string.IsNullOrEmpty(userStock.StockName))
+            // Récupérer l'ID de l'utilisateur authentifié (défini dans le middleware)
+            var authUserId = HttpContext.Items["UserId"] as string;
+            if (string.IsNullOrEmpty(authUserId))
+                return Unauthorized(new { message = "Token invalide ou manquant." });
+
+            if (userStock == null || string.IsNullOrEmpty(userStock.StockName))
             {
-                return BadRequest("Les champs UserId et StockName sont requis.");
+                return BadRequest("Le champ StockName est requis.");
             }
+            
+            // Forcer l'ID utilisateur à celui provenant du token pour éviter toute falsification
+            userStock.UserId = authUserId;
            
             try
             {
@@ -43,12 +50,14 @@ namespace investbuddy.Server.Controllers
             }
         }
 
-        // GET api/UserStock?userId=xxx
+        // GET api/UserStock
         [HttpGet]
-        public async Task<IActionResult> GetUserStocks([FromQuery] string userId)
+        public async Task<IActionResult> GetUserStocks()
         {
+            // Récupérer l'ID de l'utilisateur authentifié (défini dans le middleware)
+            var userId = HttpContext.Items["UserId"] as string;
             if (string.IsNullOrEmpty(userId))
-                return BadRequest("Le paramètre userId est requis.");
+                return Unauthorized(new { message = "Token invalide ou manquant." });
            
             try
             {

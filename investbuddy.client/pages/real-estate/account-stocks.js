@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth } from '../../firebase'
+import { useRouter } from 'next/router'
 import RealEstatePageLayout from '../../components/partials/RealEstatePageLayout'
 import RealEstateAccountLayout from '../../components/partials/RealEstateAccountLayout'
 import Link from 'next/link'
-import Nav from 'react-bootstrap/Nav'
 import Button from 'react-bootstrap/Button'
 import PropertyCard from '../../components/PropertyCard'
 import Breadcrumb from 'react-bootstrap/Breadcrumb'
@@ -15,52 +15,66 @@ import Col from 'react-bootstrap/Col'
 import Alert from 'react-bootstrap/Alert'
 
 const AccountStocksPage = () => {
-  const [user] = useAuthState(auth)
+  const router = useRouter()
+  const [user, loadingUser] = useAuthState(auth)
   const [stocks, setStocks] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
 
+  // Rediriger si non connecté
   useEffect(() => {
-    if (user) {
-      console.log("Utilisateur connecté :", user);
-      setLoading(true)
-      const url = `http://localhost:5252/api/UserStock?userId=${user.uid}`
-      console.log("Fetching stocks depuis :", url);
-      fetch(url)
-        .then(response => {
-          console.log("Réponse du serveur :", response);
-          if (!response.ok) {
-            throw new Error("Erreur lors de la récupération des stocks");
-          }
-          return response.json();
-        })
-        .then(data => {
-          console.log("Stocks récupérés :", data);
-          setStocks(data);
-          setLoading(false);
-        })
-        .catch(err => {
-          console.error("Erreur catch:", err);
-          setError("Erreur lors de la récupération des stocks");
-          setLoading(false);
-        });
-    } else {
-      console.log("Aucun utilisateur connecté.");
+    if (!loadingUser && !user) {
+      router.push('/signin-light')
     }
-  }, [user]);
+  }, [user, loadingUser, router])
+
+  // Récupérer les stocks pour l'utilisateur connecté avec token
+  useEffect(() => {
+    const fetchStocks = async () => {
+      if (user) {
+        console.log("Utilisateur connecté :", user)
+        setLoading(true)
+        const token = await user.getIdToken()
+        const url = `http://localhost:5252/api/UserStock?userId=${user.uid}`
+        console.log("Fetching stocks depuis :", url)
+        try {
+          const response = await fetch(url, {
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`
+            }
+          })
+          console.log("Réponse du serveur (status):", response.status)
+          const responseText = await response.text()
+          console.log("Réponse brute du serveur :", responseText)
+          if (!response.ok) {
+            throw new Error("Erreur lors de la récupération des stocks")
+          }
+          const data = JSON.parse(responseText)
+          console.log("Stocks récupérés :", data)
+          setStocks(data)
+        } catch (err) {
+          console.error("Erreur catch:", err)
+          setError("Erreur lors de la récupération des stocks")
+        } finally {
+          setLoading(false)
+        }
+      } else {
+        console.log("Aucun utilisateur connecté.")
+      }
+    }
+  
+    fetchStocks()
+  }, [user])
 
   const deleteAll = (e) => {
-    e.preventDefault();
-    console.log("Suppression de tous les stocks");
-    setStocks([]);
-  };
+    e.preventDefault()
+    console.log("Suppression de tous les stocks")
+    setStocks([])
+  }
 
   return (
-    <RealEstatePageLayout
-      pageTitle="Account My Stocks"
-      activeNav="Account"
-      userLoggedIn
-    >
+    <RealEstatePageLayout pageTitle="Account My Stocks" activeNav="Account" userLoggedIn>
       <RealEstateAccountLayout accountPageTitle="My Stocks">
         <div className="d-flex align-items-center justify-content-between mb-3">
           <h1 className="h2 mb-0">My Stocks</h1>
@@ -99,13 +113,12 @@ const AccountStocksPage = () => {
           </div>
         )}
         <Button as={Link} href='/real-estate/create-alert' size='lg' className='w-100 mb-3'>
-        <i className='fi-plus me-2'></i>
-        Create Alert
+          <i className='fi-plus me-2'></i>
+          Create Alert
         </Button>
       </RealEstateAccountLayout>
-      
     </RealEstatePageLayout>
-  );
-};
+  )
+}
 
-export default AccountStocksPage;
+export default AccountStocksPage
