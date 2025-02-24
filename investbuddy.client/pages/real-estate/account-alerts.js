@@ -1,24 +1,25 @@
-import { useState, useEffect } from 'react'
-import { useAuthState } from 'react-firebase-hooks/auth'
-import { auth } from '../../firebase'
-import { useRouter } from 'next/router'
-import RealEstatePageLayout from '../../components/partials/RealEstatePageLayout'
-import RealEstateAccountLayout from '../../components/partials/RealEstateAccountLayout'
-import Link from 'next/link'
-import Button from 'react-bootstrap/Button'
-import FormCheck from 'react-bootstrap/FormCheck'
-import Collapse from 'react-bootstrap/Collapse'
+// pages/real-estate/account-alert.js
+import { useState, useEffect } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../../firebase';
+import { useRouter } from 'next/router';
+import RealEstatePageLayout from '../../components/partials/RealEstatePageLayout';
+import RealEstateAccountLayout from '../../components/partials/RealEstateAccountLayout';
+import Link from 'next/link';
+import Button from 'react-bootstrap/Button';
+import FormCheck from 'react-bootstrap/FormCheck';
+import Collapse from 'react-bootstrap/Collapse';
+import NotLoggedIn from '../NotLoggedIn';
 
 const AccountNotificationsPage = () => {
-  const router = useRouter()
-  const [user, loadingUser] = useAuthState(auth)
-  
-  // Redirection si non connecté
+  const router = useRouter();
+  const [user, loadingUser] = useAuthState(auth);
+
   useEffect(() => {
     if (!loadingUser && !user) {
-      router.push('/signin-light')
+      router.push('/NotLoggedIn');
     }
-  }, [user, loadingUser, router])
+  }, [user, loadingUser, router]);
 
   const switches = [
     { id: '01', name: 'rentNew', title: 'New rental alerts', description: 'New rentals that match your Wishlist' },
@@ -27,31 +28,35 @@ const AccountNotificationsPage = () => {
     { id: '04', name: 'recomendations', title: 'Finder recommendations', description: 'Properties for rent / sale we think you\'ll like. These recommendations may be slightly outside your search criteria' },
     { id: '05', name: 'featuredNews', title: 'Featured news', description: 'News and tips you may be interested in' },
     { id: '06', name: 'extras', title: 'Finder extras', description: 'Occasional notifications about new features to make finding the perfect property easy' }
-  ]
+  ];
 
-  const [isCheckAll, setIsCheckAll] = useState(true)
-  const [isCheck, setIsCheck] = useState(['01', '02', '04'])
+  const [isCheckAll, setIsCheckAll] = useState(true);
+  const [isCheck, setIsCheck] = useState(['01', '02', '04']);
 
   const handleSelect = e => {
-    const { id, checked } = e.target
+    const { id, checked } = e.target;
     if (checked) {
-      setIsCheck(prev => [...prev, id])
+      setIsCheck(prev => [...prev, id]);
     } else {
-      setIsCheck(prev => prev.filter(item => item !== id))
+      setIsCheck(prev => prev.filter(item => item !== id));
     }
-  }
+  };
 
   const handleSelectAll = e => {
-    setIsCheckAll(!isCheckAll)
-    setIsCheck(!isCheckAll ? switches.map(item => item.id) : [])
+    setIsCheckAll(!isCheckAll);
+    setIsCheck(!isCheckAll ? switches.map(item => item.id) : []);
+  };
+
+  if (loadingUser) {
+    return <div>Loading...</div>;
+  }
+  
+  if (!user) {
+    return <NotLoggedIn />;
   }
 
   return (
-    <RealEstatePageLayout
-      pageTitle='Account Notifications'
-      activeNav='Account'
-      userLoggedIn
-    >
+    <RealEstatePageLayout pageTitle='Account Notifications' activeNav='Account' userLoggedIn>
       <RealEstateAccountLayout accountPageTitle='Notifications'>
         <h1 className='h2'>Notifications</h1>
         <p className='pt-1 mb-4'>Get real-time updates on your favorite homes, neighborhoods, and more.</p>
@@ -59,7 +64,7 @@ const AccountNotificationsPage = () => {
           {switches.map(({ id, name, title, description }) => (
             <FormCheck key={id} type='switch' id={id} className='d-flex justify-content-between ps-0 mb-4'>
               <FormCheck.Label className='me-2'>
-                <span className='h6 mb-1'>{title}</span><br/>
+                <span className='h6 mb-1'>{title}</span><br />
                 <span className='fs-sm mb-0'>{description}</span>
               </FormCheck.Label>
               <FormCheck.Input
@@ -85,7 +90,7 @@ const AccountNotificationsPage = () => {
         </div>
       </RealEstateAccountLayout>
     </RealEstatePageLayout>
-  )
-}
+  );
+};
 
-export default AccountNotificationsPage
+export default AccountNotificationsPage;

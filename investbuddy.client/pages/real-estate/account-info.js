@@ -1,54 +1,62 @@
-import { useState, useEffect } from 'react'
-import { useAuthState } from 'react-firebase-hooks/auth'
-import { auth } from '../../firebase'
-import { useRouter } from 'next/router'
-import RealEstatePageLayout from '../../components/partials/RealEstatePageLayout'
-import RealEstateAccountLayout from '../../components/partials/RealEstateAccountLayout'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import ProgressBar from 'react-bootstrap/ProgressBar'
-import Accordion from 'react-bootstrap/Accordion'
-import FormControl from 'react-bootstrap/FormControl'
-import Button from 'react-bootstrap/Button'
-import { FilePond, registerPlugin } from 'react-filepond'
-import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type'
-import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
-import FilePondPluginImageCrop from 'react-bootstrap/Accordion'
-import FilePondPluginImageResize from 'filepond-plugin-image-resize'
-import FilePondPluginImageTransform from 'filepond-plugin-image-transform'
-import 'filepond/dist/filepond.min.css'
-import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
+// pages/real-estate/account-info.js
+import { useState, useEffect } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../../firebase';
+import { useRouter } from 'next/router';
+import RealEstatePageLayout from '../../components/partials/RealEstatePageLayout';
+import RealEstateAccountLayout from '../../components/partials/RealEstateAccountLayout';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import ProgressBar from 'react-bootstrap/ProgressBar';
+import Accordion from 'react-bootstrap/Accordion';
+import FormControl from 'react-bootstrap/FormControl';
+import Button from 'react-bootstrap/Button';
+import { FilePond, registerPlugin } from 'react-filepond';
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+import FilePondPluginImageCrop from 'react-bootstrap/Accordion';
+import FilePondPluginImageResize from 'react-bootstrap/Accordion';
+import FilePondPluginImageTransform from 'react-bootstrap/Accordion';
+import 'filepond/dist/filepond.min.css';
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+import NotLoggedIn from '../NotLoggedIn';
 
 const AccountInfoPage = () => {
-  const router = useRouter()
-  const [user, loadingUser] = useAuthState(auth)
+  const router = useRouter();
+  const [user, loadingUser] = useAuthState(auth);
 
-  // Redirection si l'utilisateur n'est pas connecté
   useEffect(() => {
     if (!loadingUser && !user) {
-      router.push('/signin-light')
+      router.push('/NotLoggedIn');
     }
-  }, [user, loadingUser, router])
+  }, [user, loadingUser, router]);
+
+  if (loadingUser) {
+    return <div>Loading...</div>;
+  }
+  
+  if (!user) {
+    return <NotLoggedIn />;
+  }
 
   // États des champs
-  const [name, setName] = useState('Annette Black')
-  const [email, setEmail] = useState('annette_black@email.com')
-  const [phone, setPhone] = useState('(302) 555-0107')
-  const [company, setCompany] = useState('')
-  const [address, setAddress] = useState('')
-  const [profile, setProfile] = useState([])
+  const [name, setName] = useState('Annette Black');
+  const [email, setEmail] = useState('annette_black@email.com');
+  const [phone, setPhone] = useState('(302) 555-0107');
+  const [company, setCompany] = useState('');
+  const [address, setAddress] = useState('');
+  const [profile, setProfile] = useState([]);
 
   // Social collapse
-  const [socialOpen, setSocialOpen] = useState(false)
+  const [socialOpen, setSocialOpen] = useState(false);
 
-  // Custom accordion toggle (vous pouvez importer ou définir votre composant)
   const CustomToggle = ({ eventKey }) => {
     return (
-      <a href="#" onClick={(e) => { e.preventDefault() }}>
+      <a href="#" onClick={(e) => { e.preventDefault(); }}>
         <i className="fi-edit"></i>
       </a>
-    )
-  }
+    );
+  };
 
   return (
     <RealEstatePageLayout pageTitle='Account Personal Info' activeNav='Account' userLoggedIn>
@@ -158,4 +166,4 @@ const AccountInfoPage = () => {
   )
 }
 
-export default AccountInfoPage
+export default AccountInfoPage;

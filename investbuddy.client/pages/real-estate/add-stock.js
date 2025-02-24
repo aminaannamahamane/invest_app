@@ -1,49 +1,51 @@
-import { useState, useEffect } from 'react'
-import { useAuthState } from 'react-firebase-hooks/auth'
-import { auth } from '../../firebase'
-import { useRouter } from 'next/router'
-import RealEstatePageLayout from '../../components/partials/RealEstatePageLayout'
-import Link from 'next/link'
-import Container from 'react-bootstrap/Container'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Breadcrumb from 'react-bootstrap/Breadcrumb'
-import ProgressBar from 'react-bootstrap/ProgressBar'
-import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
-import Alert from 'react-bootstrap/Alert'
-import Modal from 'react-bootstrap/Modal'
+import { useState } from 'react';
+import { useAuth } from '../../context/AuthContext'; // Assurez-vous que le chemin est correct
+import RealEstatePageLayout from '../../components/partials/RealEstatePageLayout';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Breadcrumb from 'react-bootstrap/Breadcrumb';
+import ProgressBar from 'react-bootstrap/ProgressBar';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Modal from 'react-bootstrap/Modal';
+import NotLoggedIn from '../NotLoggedIn'; // ou le chemin vers votre composant NotLoggedIn
 
 const AddStockPage = () => {
-  const router = useRouter()
-  const [user, loadingUser] = useAuthState(auth)
-  const [stockName, setStockName] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [message, setMessage] = useState("")
-  const [confirmShow, setConfirmShow] = useState(false)
+  const { user, loading } = useAuth();
+  const router = useRouter();
+  const [stockName, setStockName] = useState("");
+  const [loadingForm, setLoadingForm] = useState(false);
+  const [message, setMessage] = useState("");
+  const [confirmShow, setConfirmShow] = useState(false);
 
-  // Redirect non-authenticated users
-  useEffect(() => {
-    if (!loadingUser && !user) {
-      router.push("/signin-light") // or your sign-in route
-    }
-  }, [user, loadingUser, router])
+  // Si l'état de chargement est en cours, affichez un loader
+  if (loading) {
+    return (
+      <Container className="mt-5">
+        <p>Loading...</p>
+      </Container>
+    );
+  }
+
+  // Si l'utilisateur n'est pas connecté, affichez NotLoggedIn
+  if (!user) {
+    return <NotLoggedIn />;
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!stockName.trim()) {
-      alert("Veuillez entrer le nom du stock")
-      return
+      alert("Veuillez entrer le nom du stock");
+      return;
     }
-    if (!user) {
-      alert("Vous devez être connecté pour ajouter un stock.")
-      return
-    }
-    setLoading(true)
+
+    setLoadingForm(true);
     try {
-      // Get JWT token from Firebase Auth and include it in the request
-      const token = await user.getIdToken()
+      const token = await user.getIdToken();
       const response = await fetch("http://localhost:5252/api/userstock", {
         method: "POST",
         headers: {
@@ -54,23 +56,23 @@ const AddStockPage = () => {
           userId: user.uid,
           StockName: stockName
         })
-      })
-      const data = await response.json()
+      });
+      const data = await response.json();
       if (response.ok) {
-        setMessage(data.message)
+        setMessage(data.message);
       } else {
-        setMessage(data.message || "Erreur lors de l'ajout du stock")
+        setMessage(data.message || "Erreur lors de l'ajout du stock");
       }
-      setStockName("")
-      setConfirmShow(true)
+      setStockName("");
+      setConfirmShow(true);
     } catch (error) {
-      console.error("Erreur lors de l'ajout du stock :", error)
-      setMessage("Erreur lors de l'ajout du stock")
-      setConfirmShow(true)
+      console.error("Erreur lors de l'ajout du stock :", error);
+      setMessage("Erreur lors de l'ajout du stock");
+      setConfirmShow(true);
     } finally {
-      setLoading(false)
+      setLoadingForm(false);
     }
-  }
+  };
 
   return (
     <RealEstatePageLayout pageTitle="Add Stock" activeNav="Vendor" userLoggedIn>
@@ -98,7 +100,7 @@ const AddStockPage = () => {
             </Breadcrumb>
 
             <div className="mb-4 text-center">
-              <h1 className="h2 mb-0">Add stock</h1>
+              <h1 className="h2 mb-0">Add Stock</h1>
               <ProgressBar variant="warning" now={10} style={{ height: '.25rem' }} className="d-lg-none mb-4" />
             </div>
 
@@ -117,15 +119,15 @@ const AddStockPage = () => {
                 />
                 <Form.Text>Ce champ est obligatoire</Form.Text>
               </Form.Group>
-              <Button type="submit" variant="primary" disabled={loading}>
-                {loading ? "En cours..." : "Ajouter le Stock"}
+              <Button type="submit" variant="primary" disabled={loadingForm}>
+                {loadingForm ? "En cours..." : "Ajouter le Stock"}
               </Button>
             </Form>
           </Col>
         </Row>
       </Container>
     </RealEstatePageLayout>
-  )
-}
+  );
+};
 
-export default AddStockPage
+export default AddStockPage;

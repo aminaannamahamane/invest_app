@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../../firebase';
+import { useRouter } from 'next/router';
 import RealEstatePageLayout from '../../components/partials/RealEstatePageLayout';
 import Link from 'next/link';
 import Container from 'react-bootstrap/Container';
@@ -12,28 +13,50 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Alert from 'react-bootstrap/Alert';
 import Modal from 'react-bootstrap/Modal';
+import NotLoggedIn from '../NotLoggedIn';
 
 const AddAlertPage = () => {
-  const [user] = useAuthState(auth);
+  const router = useRouter();
+  const [user, loadingUser] = useAuthState(auth);
   const [stocks, setStocks] = useState([]); // Liste des stocks de l'utilisateur
   const [alertType, setAlertType] = useState("price");
-  const [stockName, setStockName] = useState(""); // ✅ Variable correcte
+  const [stockName, setStockName] = useState(""); // Variable pour le nom du stock
   const [operator, setOperator] = useState("<");
   const [threshold, setThreshold] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [confirmShow, setConfirmShow] = useState(false);
 
-  // 🔥 Récupérer les stocks de l'utilisateur connecté
+  // Rediriger ou afficher NotLoggedIn si l'utilisateur n'est pas connecté
+  useEffect(() => {
+    if (!loadingUser && !user) {
+      router.push('/NotLoggedIn');
+    }
+  }, [user, loadingUser, router]);
+
+  // Si l'utilisateur est en cours de chargement, afficher un loader
+  if (loadingUser) {
+    return (
+      <Container className="mt-5">
+        <p>Loading...</p>
+      </Container>
+    );
+  }
+  // Si l'utilisateur n'est pas connecté, afficher NotLoggedIn
+  if (!user) {
+    return <NotLoggedIn />;
+  }
+
+  // Récupérer les stocks de l'utilisateur connecté
   useEffect(() => {
     if (user) {
       fetch(`http://localhost:5252/api/userstock?userId=${user.uid}`)
         .then(response => response.json())
         .then(data => {
-          console.log("Stocks récupérés :", data); // ✅ Debugging
+          console.log("Stocks récupérés :", data);
           setStocks(data);
           if (data.length > 0) {
-            setStockName(data[0].stockName); // ✅ Sélectionner le premier stock par défaut
+            setStockName(data[0].stockName); // Sélection par défaut du premier stock
           }
         })
         .catch(err => console.error("Erreur lors de la récupération des stocks :", err));
@@ -54,15 +77,15 @@ const AddAlertPage = () => {
     }
 
     const newAlert = {
-      userId: user.uid, 
-      alertType: alertType, 
-      stockName: stockName, // ✅ Correction ici
-      operator: operator, 
-      threshold: parseFloat(threshold), 
+      userId: user.uid,
+      alertType: alertType,
+      stockName: stockName,
+      operator: operator,
+      threshold: parseFloat(threshold),
       status: "active"
     };
 
-    console.log("Envoi des données :", JSON.stringify({ alert: newAlert })); // ✅ Debugging
+    console.log("Envoi des données :", JSON.stringify({ alert: newAlert }));
 
     setLoading(true);
 
@@ -70,11 +93,11 @@ const AddAlertPage = () => {
       const response = await fetch("http://localhost:5252/api/alerts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ alert: newAlert }) // ✅ Ajout de "alert"
+        body: JSON.stringify({ alert: newAlert })
       });
 
       const responseText = await response.text();
-      console.log("Réponse brute du serveur :", responseText); // ✅ Debugging
+      console.log("Réponse brute du serveur :", responseText);
 
       if (!response.ok) {
         throw new Error(`Erreur HTTP: ${response.status}, ${responseText}`);
@@ -103,7 +126,9 @@ const AddAlertPage = () => {
           <p>{message}</p>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={() => setConfirmShow(false)}>Fermer</Button>
+          <Button variant="primary" onClick={() => setConfirmShow(false)}>
+            Fermer
+          </Button>
         </Modal.Footer>
       </Modal>
 
@@ -175,6 +200,6 @@ const AddAlertPage = () => {
       </Container>
     </RealEstatePageLayout>
   );
-}
+};
 
 export default AddAlertPage;
