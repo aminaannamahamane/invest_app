@@ -19,6 +19,7 @@
     "filepond-plugin-image-resize": "^2.0.10",
     "filepond-plugin-image-transform": "^3.8.7",
     "firebase": "^11.3.1",
+    "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
     "leaflet": "^1.9.4",
     "lottie-web": "^5.12.2",

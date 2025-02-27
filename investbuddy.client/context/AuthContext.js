@@ -3,6 +3,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import { auth, db } from "../src/firebaseConfig"; // 🔥 Import Firestore
 import { GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
 import { doc, setDoc, getDoc } from "firebase/firestore"; // 🔥 Import Firestore
+import Cookies from 'js-cookie';
 
 const AuthContext = createContext();
 
@@ -14,6 +15,14 @@ export const AuthProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
         await saveUserToFirestore(currentUser); // 🔥 Ajoute l'utilisateur à Firestore
+
+        // Récupérer et stocker le token dans un cookie nommé "token"
+        const token = await currentUser.getIdToken();
+        // Stockage du token pendant 1 jour, en mode sécurisé en production
+        Cookies.set('token', token, { expires: 1, secure: process.env.NODE_ENV === 'production' });
+      } else {
+        // Si l'utilisateur se déconnecte, supprimer le cookie
+        Cookies.remove('token');
       }
       setUser(currentUser);
       setLoading(false);
@@ -60,6 +69,7 @@ export const AuthProvider = ({ children }) => {
       await signOut(auth);
       setUser(null);
       localStorage.removeItem("user");
+      Cookies.remove('token'); // Supprimer le cookie lors de la déconnexion
     } catch (error) {
       console.error("Erreur de déconnexion :", error);
     }

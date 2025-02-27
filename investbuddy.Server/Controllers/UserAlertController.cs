@@ -30,29 +30,38 @@ namespace investbuddy.Server.Controllers
             {
                 _logger.LogInformation("🚀 Requête POST reçue pour une alerte !");
                 
-                // ✅ Vérifie si "alert" est bien présent
+                // Vérifier que le champ "alert" est présent dans le JSON
                 if (!alertData.TryGetProperty("alert", out JsonElement alertElement))
                 {
                     return BadRequest(new { message = "Données invalides : 'alert' manquant" });
                 }
 
-                // ✅ Désérialise correctement en `UserAlert`
+                // Désérialiser en UserAlert
                 UserAlert alert = JsonSerializer.Deserialize<UserAlert>(alertElement.GetRawText(), new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 });
 
-                if (alert == null || string.IsNullOrEmpty(alert.UserId) || string.IsNullOrEmpty(alert.StockName) || string.IsNullOrEmpty(alert.Operator))
+                if (alert == null || string.IsNullOrEmpty(alert.StockName) || string.IsNullOrEmpty(alert.Operator))
                 {
                     return BadRequest(new { message = "Données invalides : champs obligatoires manquants" });
                 }
 
-                // ✅ Générer un ID automatique et le timestamp
+                // Forcer l'ID utilisateur à être celui du token validé par le middleware
+                var authUserId = HttpContext.Items["UserId"] as string;
+                if (string.IsNullOrEmpty(authUserId))
+                {
+                    return Unauthorized(new { message = "Token invalide ou manquant." });
+                }
+                alert.UserId = authUserId;
+
+                // Générer un ID et le timestamp côté serveur
                 alert.Id = Guid.NewGuid().ToString();
                 alert.CreatedAt = Timestamp.FromDateTime(DateTime.UtcNow);
-                _logger.LogInformation(alert.StockName);
 
-                // ✅ Ajoute l'alerte dans Firestore
+                _logger.LogInformation($"StockName: {alert.StockName}");
+
+                // Ajouter l'alerte dans Firestore
                 await _firebaseService.AddUserAlertAsync(alert);
 
                 return Ok(new { message = "Alerte créée avec succès !" });

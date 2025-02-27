@@ -27,6 +27,13 @@ namespace investbuddy.Server.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUser(string id)
         {
+            // On s'assure que l'ID dans l'URL correspond à celui du token
+            var authUserId = HttpContext.Items["UserId"] as string;
+            if (string.IsNullOrEmpty(authUserId) || authUserId != id)
+            {
+                return Unauthorized(new { message = "Accès non autorisé." });
+            }
+
             var user = await _firebaseService.GetUserAsync(id);
             if (user == null) return NotFound();
             return Ok(user);
@@ -35,37 +42,30 @@ namespace investbuddy.Server.Controllers
         [HttpPut("{id}/lastLogin")]
         public async Task<IActionResult> UpdateLastLogin(string id)
         {
+            var authUserId = HttpContext.Items["UserId"] as string;
+            if (string.IsNullOrEmpty(authUserId) || authUserId != id)
+            {
+                return Unauthorized(new { message = "Accès non autorisé." });
+            }
             await _firebaseService.UpdateLastLoginAsync(id);
             return Ok(new { message = "Last login updated!" });
         }
 
-        // 📌 ✅ Endpoint pour ajouter une action en Watchlist
-        [HttpPost("stocks")]
-        public async Task<IActionResult> AddStockToWatchlist([FromBody] UserStock userStock)
-        {
-            if (userStock == null || string.IsNullOrEmpty(userStock.UserId) || userStock.StockName  == null)
-            {
-                return BadRequest(new { message = "userId et defaultStocks sont requis." });
-            }
-
-            await _firebaseService.AddUserStocksAsync(userStock.UserId, userStock.StockName );
-
-            return Ok(new { message = "Stock watchlist updated successfully!" });
-        }
-
-        // ✅ Nouvelle méthode pour changer le thème
         [HttpPut("{id}/theme")]
         public async Task<IActionResult> ChangeTheme(string id, [FromBody] ThemeRequest request)
         {
+            var authUserId = HttpContext.Items["UserId"] as string;
+            if (string.IsNullOrEmpty(authUserId) || authUserId != id)
+            {
+                return Unauthorized(new { message = "Accès non autorisé." });
+            }
             if (request == null || string.IsNullOrEmpty(request.Theme))
             {
                 return BadRequest(new { message = "Le champ 'theme' est requis." });
             }
-
             await _firebaseService.UpdateUserThemeAsync(id, request.Theme);
             return Ok(new { message = "Thème mis à jour avec succès", theme = request.Theme });
         }
-
     }
 
     public class ThemeRequest

@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "investbuddy-dc991",
+  "private_key_id": "13c087b4b7f5f57c448e62654c26b791ece4c980",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCgGxzmb1KgHfeF\no/gz2QJ4Ls7fajEGvcykWvTdcvdN/tj0RMJ9SAcV4Balq+Wg3WleXMCp888o7ZLM\nCFacO6RQ115Fl3libuARToXVYYU6bmTyYPT269pFZWLKYsoTBN1PSk05gJi2s+fS\neA9AAZEawE5kgoJmdBokrIfMhI9ZDCZXnltw2RkJIoVnEgnwDexpvTy+zy7MRw7g\ndmJm3Dx6O7K0v1GmFe3T3GW3dw7ObhJHLQyD6JS1OumeGmcOBoYYgwf39J6PGSGu\npQx/aRcNsuZLqF9irZRhnSArJbJ2q4Cz3GyBU6zmIOG/B1aEzsRr12fwtQfH410L\nBpCsPOgzAgMBAAECggEAAIK1n+KA//O4g1uXggrSIDH+BOZgy6W1Tlzf5Qjl0wDa\nDkVd3WpqY154lAStUcsC+AMRtjkJ0xaW3kG0jQD/sCZPracjAvZZjpSShrCt7RbH\nCaLXhSYRZyFApGaWQGNGlWcmQeWwFv0R4zDw04JtxQkR9u4Xnl4Ga1GFiVhu4JjR\nBw2pPt8cHNZiwhZVRHOtnsoj24oayl5xHXGUPMNUo6ehbTuYTIkUskwNusEdCEUo\nEc9hoOWPBwrWrPpt9aBBqN2eVKsB0qnI8jaltL0bEJu/PlpTxfsOJm/9VVXfAIsa\nY4jPRxhp3isbG5B9qm44U8JtgfO0pxO6+DU/avlNAQKBgQDZpMKOvAbIrtHWeHIo\n89Ps9OZvq7NSt4+XYw/2ckffrJwUo4XiCFLc2WYq6CprIqCjkvl1MdpEyN5h48Zj\niO31S5vs5pm455ni/29MDlNixXBwA4FOPCGVzVgI9RopcJEupGvliHH+8E32GDfL\nGcOWrsz3zvC2gropsZDTFpmCgQKBgQC8UnlxaasjGMk3ihKVTlw0xzMZaOWPjuuL\nOmgJi8TdbvoopWiOFBwyz+WpSMFDqR8VVBvH+aKdlFWGujMErUCjBiGozZKj6h71\nMYuXjEND8YYDBU9VXeBZ13eXbOoMzaEj9XlU3k/2vYL3FFEZmbqiII5l3iMeF18J\nx27ZfEKoswKBgDS58pxrtuUFXTatJVMAhxX/2pexLBdc+v9881AMLZdllMZ3Oycg\nRxrT3CmG50ffMrWOFLssoalKVH24lcZlVOi5MYQ59YHTMffJVChDzDXAiVXJs5jF\nfolxHuPEpVrmt3VqRe1smdleVDTLdzDQBA9MN8HNM4mzr/AL4X8SGYyBAoGANzns\neVDmqhUztQDdsEFZkvSzzIjRgUcFVkAbkGkXo2RPIipXvgqxtkj3baxzWLc48VVI\nDF3tzU5ZwnfKTF3ObcB3kHwwu7cFuxv7dsbgVwV2Kl6dREiSaWZhoNuEy5pl3hi3\nqybCxnYO+QxRODO34qGvgLojDEkISuLcZBUnqzcCgYBflxGCX3lLcwPJtqS2EUjm\n53ZaaG9XG0PerrlI0OzHxQd3Gw7iAr8ZiiEqbhYIjm5jEcFwgePgt4JrnrxHH98K\ndzJS6APG0s8Pbk2kBjG3lwKXmhJRTTxYWvrYiT/P/dw1hzkc8k4jP0hZUGRvB1V6\n1F7uz2KwC00Fp1bXC8K2xQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-fbsvc@investbuddy-dc991.iam.gserviceaccount.com",
+  "client_id": "115149177898362041816",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40investbuddy-dc991.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
