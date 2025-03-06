@@ -7,7 +7,6 @@ from statsmodels.tsa.arima.model import ARIMA
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
-# Configuration for Polygon API (update API key as needed)
 API_KEY = 'MGi_WdX9ktIi6maLsK_gcGaa7RrObmQf'
 DEFAULT_AGGREGATE = 'day'
 DEFAULT_TIMES = '1'
