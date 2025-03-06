@@ -38,7 +38,7 @@ def get_forecast(stock, forecast_steps):
     if inferred_freq:
         df.index = pd.DatetimeIndex(df.index, freq=inferred_freq)
     else:
-        df = df.asfreq('B', method='ffill')
+        df = df.asfreq('h', method='ffill')
     
     df['LogClose'] = np.log(df['Close'])
     ts = df['LogClose']
