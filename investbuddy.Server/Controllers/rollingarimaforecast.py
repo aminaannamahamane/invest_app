@@ -1,3 +1,4 @@
+!pip install requests pandas numpy statsmodels python-dateutil
 import sys
 import json
 import requests
