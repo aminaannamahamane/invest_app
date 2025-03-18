@@ -98,19 +98,21 @@ const AccountStocksPage = () => {
         {error && <Alert variant="danger">{error}</Alert>}
         {stocks.length ? (
           <Row>
-            {stocks.map((stock, indx) => (
-              <Col key={indx} md={4} className="mb-4">
-                <PropertyCard
-                  href="#"
-                  images={["/images/placeholder-stock.jpg"]}
-                  title={stock.stockName}
-                  badges={[]}
-                  footer={[]}
-                  horizontal
-                />
-              </Col>
-            ))}
-          </Row>
+          {stocks.map((stock, indx) => (
+            <Col key={indx} md={4} className="mb-4">
+              <PropertyCard
+                href="#"
+                images={["/images/placeholder-stock.jpg"]}
+                title={stock.stockName}
+                badges={[]}
+                footer={[]}
+                horizontal
+                onClick={() => window.location.href = `https://streamlit.io/?stock=${encodeURIComponent(stock.stockName)}`}
+                style={{ cursor: "pointer" }} // Pour rendre l'élément cliquable
+              />
+            </Col>
+          ))}
+        </Row>
         ) : (
           <div className="text-center pt-2 pt-md-4 pt-lg-5 pb-2 pb-md-0">
             <i className="fi-home display-6 text-muted mb-4"></i>
